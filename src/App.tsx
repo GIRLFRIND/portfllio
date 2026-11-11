@@ -168,33 +168,12 @@ export default function App() {
           </div>
         </div>
 
-        <div
-          className="hero-panel"
-          aria-label="Frontend and backend development with an interest in AI engineering"
-        >
-          <div className="hero-panel-top">
-            <span className="hero-panel-status">Learning and building</span>
-            <span>Portfolio · 2026</span>
-          </div>
-          <div className="hero-panel-art" aria-hidden="true">
-            <div className="hero-orbit hero-orbit--one" />
-            <div className="hero-orbit hero-orbit--two" />
-            <div className="hero-orbit hero-orbit--three" />
-            <span className="hero-panel-mark">FW</span>
-          </div>
-          <div>
-            <p className="hero-panel-title">Curiosity meets code.</p>
-            <div className="hero-panel-tags">
-              <span>Frontend</span>
-              <span>Backend</span>
-              <span>AI engineering</span>
-              <span>Computer science</span>
-            </div>
-          </div>
-          <div className="hero-panel-bottom">
-            <span>Building a little better every day</span>
-            <span>01 — 04</span>
-          </div>
+        <div className="hero-reference">
+          <img
+            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=85"
+            alt="A laptop on a desk displaying a software development workspace"
+            loading="eager"
+          />
         </div>
 
         <div className="hero-bottom">

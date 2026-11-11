@@ -41,6 +41,7 @@ export default function StoryStack({ cards }: StoryStackProps) {
       const runway = Math.max(section.offsetHeight - viewportHeight, 1);
       const distance = clamp(-section.getBoundingClientRect().top, 0, runway);
       const progress = (distance / runway) * (cards.length - 1);
+      const frameHeight = cardRefs.current[0]?.parentElement?.clientHeight ?? viewportHeight * 0.62;
       const counter = document.getElementById('story-count');
       const activeIndex = Math.min(Math.floor(progress), cards.length - 1);
       if (counter) {
@@ -52,16 +53,23 @@ export default function StoryStack({ cards }: StoryStackProps) {
         else step.removeAttribute('aria-current');
       });
 
-      // Step 4: JavaScript writes only the three transform custom properties.
+      // Step 4: JavaScript writes animation values as CSS custom properties.
       cardRefs.current.forEach((card, index) => {
         if (!card) return;
         const distanceFromFront = index - progress;
         const offset = distanceFromFront < 0 ? clamp(-distanceFromFront, 0, 1) : 0;
         const depth = distanceFromFront > 0 ? Math.min(distanceFromFront, 3) : 0;
+        const ramp = clamp(offset / 0.2, 0, 1);
+        const easedRamp = ramp * ramp * (3 - 2 * ramp);
+        const nextEdgeDistance =
+          (1 - offset) * easedRamp * (14 + frameHeight * 0.04);
 
         card.style.setProperty('--offset', String(offset));
         card.style.setProperty('--stack', String(depth * 14));
         card.style.setProperty('--scale', String(1 - depth * 0.04));
+        card.style.setProperty('--clip', String(offset * 100));
+        card.style.setProperty('--nd', String(nextEdgeDistance));
+        card.style.setProperty('--shade', String(offset * 0.22));
       });
     };
 
@@ -184,6 +192,9 @@ export default function StoryStack({ cards }: StoryStackProps) {
           --offset: 0;
           --stack: 0;
           --scale: 1;
+          --clip: 0;
+          --nd: 0;
+          --shade: 0;
           position: absolute;
           inset: 0;
           overflow: hidden;
@@ -196,11 +207,21 @@ export default function StoryStack({ cards }: StoryStackProps) {
           background: #f3ecdc;
           color: #181713;
           box-shadow: 0 32px 80px rgba(0, 0, 0, 0.38);
-          transform: translate3d(0, calc(var(--offset) * -110% + var(--stack) * 1px), 0) scale(var(--scale));
+          transform: translate3d(0, calc(var(--offset) * -100% + var(--stack) * 1px), 0) scale(var(--scale));
           transform-origin: center top;
+          clip-path: inset(calc(var(--clip) * 1% + var(--nd) * 1px) -80px -80px -80px);
           will-change: transform;
-          opacity: calc(1 - var(--offset));
           transition: box-shadow 350ms ease, border-color 350ms ease;
+        }
+
+        .story-card::after {
+          position: absolute;
+          z-index: 3;
+          inset: 0;
+          background: rgba(13, 13, 13, 0.3);
+          content: '';
+          opacity: var(--shade);
+          pointer-events: none;
         }
 
         .story-card:hover {
