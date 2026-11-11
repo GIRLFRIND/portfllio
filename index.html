@@ -411,7 +411,7 @@
           <div class="story-frame">
             <article class="story-card card-with-photo profile-card">
               <header class="card-header"><span class="card-number">01</span><span class="card-eyebrow">Computer science · Semester 07</span></header>
-              <img class="card-photo portrait-photo" src="./images/fazal-wahid.jpg" alt="Portrait of Fazal Wahid" onerror="this.onerror=null;this.src='./public/images/fazal-wahid.jpg'" />
+              <img class="card-photo portrait-photo" src="./public/images/fazal-wahid.jpg" alt="Portrait of Fazal Wahid" onerror="this.onerror=null;this.src='./images/fazal-wahid.jpg'" />
               <div class="card-image-caption"><strong>Fazal Wahid</strong>Curious mind · Full-stack developer</div>
               <div class="card-copy"><h3>Hi, I’m Fazal Wahid.</h3><p>A computer science student and full-stack developer, turning thoughtful ideas into useful digital experiences.</p></div>
             </article>
@@ -541,6 +541,11 @@
           steps.forEach((step, index) => step.removeEventListener('click', stepHandlers[index]));
         }, { once: true });
       })();
+    </script>
+    <script type="module">
+      if (import.meta.env && (import.meta.env.DEV || import.meta.env.PROD)) {
+        import('/src/main.tsx');
+      }
     </script>
   </body>
 </html>
